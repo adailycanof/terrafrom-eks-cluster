@@ -20,7 +20,11 @@ ${var.additional_roles_map}
 YAML
 
     mapUsers = <<YAML
+<<<<<<< HEAD
 - userarn: arn:aws:iam::000011110000:user/admin
+=======
+- userarn: arn:aws:iam::111100000000:user/admin
+>>>>>>> 953c2b485108f52817f475e48bd6d533c0000fbe
   username: admin
   groups:
     - system:masters  # Gives admin access
