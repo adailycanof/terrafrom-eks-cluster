@@ -1,7 +1,7 @@
 # Create IAM policy for the AWS Load Balancer Controller
-data "aws_eks_cluster" "cluster" {
-  name = local.cluster_name
-}
+#data "aws_eks_cluster" "cluster" {
+#  name = local.cluster_name
+#}
 
 resource "aws_iam_policy" "lb_controller" {
   name        = "AWSLoadBalancerControllerIAMPolicy"
@@ -20,7 +20,7 @@ module "lb_controller_iam_role" {
 
   oidc_providers = {
     main = {
-      provider_arn               = "arn:aws:iam::${local.account_id}:oidc-provider/${replace(var.cluster_name.identity[0].oidc[0].issuer, "https://", "")}"
+      provider_arn               = "arn:aws:iam::${local.account_id}:oidc-provider/${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}"
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
@@ -72,7 +72,7 @@ resource "helm_release" "lb_controller" {
 
   set {
     name  = "vpcId"
-    value = var.vpc_id
+    value = aws_vpc.eks_vpc.id
   }
 
   depends_on = [
